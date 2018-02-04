@@ -1,0 +1,14 @@
+# Local only
+**/_*
+
+# Configuration
+config.json
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out

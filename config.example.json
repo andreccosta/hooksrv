@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "my-repository-name": {
+      "headers": {
+        "X-Gitlab-Token": "gitlab-secret-webhook-header-token"
+      },
+      "commands": [
+        "docker pull hub.docker.com/u/andreccosta/some-docker-image:latest",
+        "/home/foo/bar.sh"
+      ]
+    }
+  }
+}
