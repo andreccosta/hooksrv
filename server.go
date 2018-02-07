@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"gitlab.com/andreccosta/hooksrv/config"
@@ -15,7 +16,23 @@ func main() {
 
 	c := config.ReadConfig("config.json")
 
-	for url, _ := range c.Hooks {
+	for url, hook := range c.Hooks {
 		log.Print("Loaded hook with url\t" + url)
+
+		http.HandleFunc("/"+url, hook.Handler)
 	}
+
+	log.Printf("Listening on %s...", addr)
+	err := http.ListenAndServe(":"+addr, logRequest(http.DefaultServeMux))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func logRequest(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s / %s - %s - %s - %s", r.Host, r.Header.Get("X-Real-IP"), r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
 }
