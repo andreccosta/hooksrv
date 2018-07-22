@@ -1,6 +1,9 @@
 # Local only
 **/_*
 
+# Ignore builds
+dist/
+
 # Configuration
 config.json
 
