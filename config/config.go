@@ -6,13 +6,17 @@ import (
 	"log"
 )
 
-// Config represents the config file
+// Config represents the configuration file
 type Config struct {
 	Hooks map[string]Hook `json:"hooks"`
 }
 
-// ReadConfig reads configuration file
-func ReadConfig(path string) Config {
+// Load sets up the configuration
+func Load(path string) Config {
+	return read(path)
+}
+
+func read(path string) Config {
 	raw, err := ioutil.ReadFile(path)
 
 	if err != nil {
