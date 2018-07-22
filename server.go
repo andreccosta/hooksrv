@@ -14,11 +14,9 @@ func main() {
 		addr = "8080"
 	}
 
-	c := config.ReadConfig("config.json")
+	cfg := config.Load("config.json")
 
-	for url, hook := range c.Hooks {
-		log.Print("Loaded hook with url\t" + url)
-
+	for url, hook := range cfg.Hooks {
 		http.HandleFunc("/"+url, hook.Handler)
 	}
 
