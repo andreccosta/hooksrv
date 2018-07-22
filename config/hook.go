@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -13,12 +14,13 @@ import (
 type Hook struct {
 	Headers  map[string]string `json:"headers"`
 	Commands []string          `json:"commands"`
+	Path     string            `json:"path"`
 }
 
 // Handler handles an incoming request to a hook
-func (hook *Hook) Handler(w http.ResponseWriter, r *http.Request) {
+func (hook Hook) Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		log.Printf("Invalid HTTP method")
+		log.Print("Invalid HTTP method")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -26,6 +28,17 @@ func (hook *Hook) Handler(w http.ResponseWriter, r *http.Request) {
 	for header, value := range hook.Headers {
 		if r.Header.Get(header) != value {
 			log.Print("Header mismatch")
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+	}
+
+	if hook.Path != "" {
+		log.Print("Changing working directory ...")
+		err := os.Chdir(hook.Path)
+
+		if err != nil {
+			log.Printf("Error: %s", err)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -42,6 +55,7 @@ func (hook *Hook) Handler(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Printf("Command failed\t%s", err)
+			log.Printf("Output\t%s", out.String())
 			return
 		}
 	}
