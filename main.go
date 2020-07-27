@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"gitlab.com/andreccosta/hooksrv/config"
+	"github.com/andreccosta/hooksrv/config"
 )
 
 func main() {

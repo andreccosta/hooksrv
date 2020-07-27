@@ -2,7 +2,7 @@
 **/_*
 
 # Ignore builds
-dist/
+bin/
 
 # Configuration
 config.json
