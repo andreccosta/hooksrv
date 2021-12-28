@@ -1,0 +1,28 @@
+{
+	"name": "Go",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			"VARIANT": "1-bullseye",
+			"NODE_VERSION": "lts/*"
+		}
+	},
+	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+	"settings": {
+		"go.toolsManagement.checkForUpdates": "local",
+		"go.useLanguageServer": true,
+		"go.gopath": "/go",
+		"go.goroot": "/usr/local/go"
+	},
+	"extensions": [
+		"golang.Go"
+	],
+	"forwardPorts": [8080],
+	"portsAttributes": {
+		"8080": {
+			"label": "Server",
+			"onAutoForward": "notify"
+		}
+	},
+	"remoteUser": "vscode"
+}
